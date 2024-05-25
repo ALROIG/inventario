@@ -13,18 +13,18 @@ app.use(session({
 }));
 
 // MySQL database connection
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    port: 3306,
-    password: "12345678",
-    database: "inventario"
-});
+//const con = mysql.createConnection({
+//  host: "localhost",
+//  user: "root",
+// port: 3306,
+// password: "12345678",
+//  database: "inventario"
+//});
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected to MySQL database!");
-});
+//con.connect(function (err) {
+//    if (err) throw err;
+//    console.log("Connected to MySQL database!");
+//});
 
 app.set('view-engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
@@ -114,19 +114,19 @@ app.get("/prov", (req, res) => {
         }
     });
 });
-app.post("/reg-prov", (req, res)=>{
-    try{
+app.post("/reg-prov", (req, res) => {
+    try {
         const provData = {
-            nombre_prov : req.body.name,
-            apellido_prov : req.body.lname,
-            empresa_prov : req.body.empresa,
-            correo_prov : req.body.email,
-            terminos_pago : req.body.pago,
-            dir_prov : req.body.dir,
-            telefono_prov : req.body.tel
+            nombre_prov: req.body.name,
+            apellido_prov: req.body.lname,
+            empresa_prov: req.body.empresa,
+            correo_prov: req.body.email,
+            terminos_pago: req.body.pago,
+            dir_prov: req.body.dir,
+            telefono_prov: req.body.tel
         };
         const sql = 'INSERT INTO inventario.proveedor SET ?';
-        con.query(sql, provData, (err, result)=>{
+        con.query(sql, provData, (err, result) => {
             if (err) {
                 console.error("Error inserting prov data:", err);
                 return res.redirect('/prov');
@@ -135,29 +135,29 @@ app.post("/reg-prov", (req, res)=>{
             res.redirect('/prov');
         });
 
-    }catch(error){
+    } catch (error) {
         console.error("Error registering prov:", error);
         res.redirect('/');
     }
 })
 
-app.get("/inventario", (req,res)=>{
+app.get("/inventario", (req, res) => {
     con.query("SELECT * FROM producto", function (err, result) {
         if (err) {
             console.error(err);
             res.status(500).send("Error retrieving productos");
         } else {
             console.log("Productos data:", result); // This will output the retrieved data
-            res.render('inventario.ejs', { prod : result });
+            res.render('inventario.ejs', { prod: result });
         }
     });
 });
 
-app.get("/add-prod",(req,res)=>{
+app.get("/add-prod", (req, res) => {
     res.render("add-prod.ejs")
 })
 
-app.post("/buy-prod", (req,res) =>{
+app.post("/buy-prod", (req, res) => {
     try {
         const provData = {
             nombre_pro: req.body.name,
